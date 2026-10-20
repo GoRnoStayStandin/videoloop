@@ -1,6 +1,7 @@
 param(
     [switch]$Test,
     [switch]$Integration,
+    [switch]$Installer,
     [string]$VlcPath = "$env:ProgramFiles\VideoLAN\VLC\vlc.exe"
 )
 
@@ -63,3 +64,7 @@ $zip = Join-Path $root 'artifacts\VideoDisplayChecker-win-x86.zip'
 Compress-Archive -Path (Join-Path $output '*') -DestinationPath $zip -Force
 Write-Output "Built: $exe"
 Write-Output "Package: $zip"
+
+if ($Installer) {
+    & (Join-Path $root 'installer\Build-Installer.ps1') -Root $root -Test:($Test -or $Integration)
+}
